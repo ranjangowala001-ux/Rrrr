@@ -1,1141 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="TrendVault by luxury.com — premium fashion, beauty, accessories and lifestyle products.">
-  <title>TrendVault | luxury.com</title>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
-
-    :root {
-      --black: #101010;
-      --dark: #171717;
-      --muted: #6d6d6d;
-      --line: #e9e9e9;
-      --soft: #f7f7f5;
-      --white: #fff;
-      --accent: #b48a42;
-      --green: #147a4b;
-      --red: #c54141;
-      --shadow: 0 14px 40px rgba(0,0,0,.07);
-      --radius: 20px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--white);
-      color: var(--black);
-      font-family: "DM Sans", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    button, input, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-    img { display: block; width: 100%; }
-    a { color: inherit; text-decoration: none; }
-    h1, h2, h3, h4, p { margin-top: 0; }
-    .hidden { display: none !important; }
-    .container { width: min(1240px, calc(100% - 36px)); margin: auto; }
-    .view { display: none; min-height: 65vh; animation: reveal .35s ease; }
-    .view.active { display: block; }
-    @keyframes reveal { from { opacity: 0; transform: translateY(8px); } }
-
-    .announcement {
-      background: #101010;
-      color: #fff;
-      text-align: center;
-      padding: 9px 16px;
-      font-size: 12px;
-      letter-spacing: .08em;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(0,0,0,.06);
-    }
-
-    .header-inner {
-      height: 76px;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .logo {
-      display: flex;
-      flex-direction: column;
-      line-height: 1;
-      font-family: "Manrope", sans-serif;
-      font-size: 23px;
-      font-weight: 800;
-      letter-spacing: -.06em;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .logo small {
-      margin-top: 4px;
-      color: #999;
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-    }
-
-    nav { display: flex; align-items: center; gap: 23px; margin: auto; }
-    nav a {
-      position: relative;
-      font-size: 14px;
-      font-weight: 600;
-      color: #383838;
-      cursor: pointer;
-    }
-    nav a:after {
-      content: "";
-      position: absolute;
-      left: 0; right: 100%; bottom: -8px;
-      height: 2px; background: #111;
-      transition: .25s;
-    }
-    nav a:hover:after { right: 0; }
-
-    .header-actions { display: flex; gap: 5px; align-items: center; }
-    .icon-btn {
-      position: relative;
-      border: 0;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      display: grid; place-items: center;
-      color: #151515;
-      background: transparent;
-      transition: .25s;
-    }
-    .icon-btn:hover { background: #f1f1ef; transform: translateY(-2px); }
-    .icon-btn svg { width: 19px; }
-    .badge {
-      position: absolute; top: 1px; right: 0;
-      min-width: 17px; height: 17px; padding: 0 4px;
-      border-radius: 10px; background: #111; color: #fff;
-      display: grid; place-items: center;
-      font-size: 9px; border: 2px solid #fff;
-    }
-    .mobile-toggle { display: none; }
-
-    .hero {
-      min-height: 670px;
-      display: grid;
-      grid-template-columns: 1.03fr .97fr;
-      background: linear-gradient(120deg,#f7f5f0,#eeeae2);
-      overflow: hidden;
-    }
-    .hero-copy {
-      padding: 100px max(30px, calc((100vw - 1240px)/2));
-      padding-right: 58px;
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    .eyebrow {
-      display: flex; align-items: center; gap: 10px;
-      color: #6d5a36;
-      text-transform: uppercase; letter-spacing: .18em;
-      font-size: 11px; font-weight: 800;
-      margin-bottom: 21px;
-    }
-    .eyebrow:before { content:""; width: 34px; height: 1px; background: currentColor; }
-    .hero h1 {
-      max-width: 680px;
-      margin-bottom: 22px;
-      font-family: "Manrope", sans-serif;
-      font-size: clamp(48px,6vw,84px);
-      line-height: .98;
-      letter-spacing: -.065em;
-    }
-    .hero p {
-      max-width: 570px; color: #5d5d5d;
-      font-size: 18px; line-height: 1.7;
-      margin-bottom: 34px;
-    }
-    .hero-image { position: relative; min-height: 600px; overflow: hidden; }
-    .hero-image img { height: 100%; object-fit: cover; }
-    .hero-image:after {
-      content:""; position:absolute; inset:0;
-      background: linear-gradient(90deg,rgba(238,234,226,.3),transparent 35%);
-    }
-    .floating-note {
-      position: absolute; right: 24px; bottom: 24px; z-index: 2;
-      background: rgba(255,255,255,.9); backdrop-filter: blur(12px);
-      border-radius: 18px; padding: 18px 20px; box-shadow: var(--shadow);
-    }
-    .floating-note strong { display:block; font-size: 18px; margin-bottom: 3px; }
-    .floating-note span { color:var(--muted); font-size: 12px; }
-
-    .btn {
-      min-height: 48px;
-      padding: 0 23px;
-      border: 1px solid #111;
-      border-radius: 12px;
-      background: #111; color: #fff;
-      display: inline-flex; align-items: center; justify-content:center; gap: 9px;
-      font-size: 14px; font-weight: 700;
-      transition: .25s;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.16); }
-    .btn-outline { background: transparent; color:#111; }
-    .btn-outline:hover { background:#111; color:#fff; }
-    .btn-light { background:#fff; color:#111; border-color:#fff; }
-    .btn-sm { min-height: 39px; padding: 0 15px; border-radius: 10px; font-size: 12px; }
-    .btn-block { width:100%; }
-    .hero-buttons { display:flex; gap:12px; flex-wrap: wrap; }
-
-    section { padding: 82px 0; }
-    .section-head {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      gap: 25px; margin-bottom: 31px;
-    }
-    .section-head h2 {
-      margin-bottom: 6px; font-family:"Manrope",sans-serif;
-      font-size: clamp(28px,3vw,40px); letter-spacing:-.045em;
-    }
-    .section-head p { margin:0; color:var(--muted); }
-    .text-link { border:0; background:none; font-weight:700; border-bottom:1px solid; padding:0 0 4px; }
-
-    .categories-grid {
-      display: grid; grid-template-columns: repeat(5,1fr); gap: 16px;
-    }
-    .category-card {
-      position: relative; height: 235px; overflow:hidden; border-radius:18px;
-      background:#eee; cursor:pointer; box-shadow: 0 5px 15px rgba(0,0,0,.04);
-    }
-    .category-card img { height:100%; object-fit:cover; transition:.5s; }
-    .category-card:after {
-      content:""; position:absolute; inset:0;
-      background:linear-gradient(0deg,rgba(0,0,0,.64),transparent 58%);
-    }
-    .category-card:hover img { transform:scale(1.06); }
-    .category-card h3 {
-      position:absolute; z-index:2; left:18px; right:18px; bottom:18px;
-      color:#fff; margin:0; font-size:16px;
-    }
-
-    .product-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
-    .product-card {
-      position:relative; min-width:0; padding:10px;
-      border:1px solid #ededed; border-radius:20px; background:#fff;
-      transition:.3s;
-    }
-    .product-card:hover { transform:translateY(-6px); box-shadow:var(--shadow); }
-    .product-media {
-      position:relative; overflow:hidden; border-radius:15px; aspect-ratio:.82;
-      background:#f5f5f3; cursor:pointer;
-    }
-    .product-media img { height:100%; object-fit:cover; transition:.5s; }
-    .product-card:hover .product-media img { transform:scale(1.035); }
-    .heart {
-      position:absolute; top:11px; right:11px; z-index:2;
-      width:36px; height:36px; display:grid; place-items:center;
-      border:0; border-radius:50%; background:rgba(255,255,255,.9);
-      box-shadow:0 5px 15px rgba(0,0,0,.08);
-    }
-    .heart svg { width:17px; }
-    .heart.active { background:#111; color:#fff; }
-    .sale-chip {
-      position:absolute; top:12px; left:12px; z-index:2;
-      padding:6px 9px; border-radius:20px; background:#fff; color:#b33131;
-      font-size:10px; font-weight:800;
-    }
-    .product-info { padding:14px 4px 5px; }
-    .brand { color:#8a8a8a; text-transform:uppercase; letter-spacing:.1em; font-size:9px; font-weight:800; }
-    .product-info h3 {
-      margin:6px 0 7px; font-size:15px; line-height:1.35;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .rating { color:#d69e2e; font-size:12px; display:flex; gap:5px; align-items:center; }
-    .rating span { color:#777; }
-    .prices { display:flex; gap:8px; align-items:center; margin:10px 0 13px; flex-wrap:wrap; }
-    .price { font-size:17px; font-weight:800; }
-    .old-price { color:#999; text-decoration:line-through; font-size:12px; }
-    .discount { color:var(--green); font-size:11px; font-weight:700; }
-    .card-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
-
-    .offer {
-      background:#121212; color:#fff;
-      border-radius:30px; overflow:hidden;
-      display:grid; grid-template-columns:1fr .85fr;
-      min-height:400px;
-    }
-    .offer-copy { padding:65px; display:flex; flex-direction:column; justify-content:center; }
-    .offer-copy small { letter-spacing:.25em; color:#d4b875; font-weight:700; }
-    .offer-copy h2 { font:800 clamp(40px,5vw,68px)/1 "Manrope"; letter-spacing:-.06em; margin:16px 0; }
-    .offer-copy p { color:#c7c7c7; font-size:18px; }
-    .offer-image img { height:100%; object-fit:cover; }
-    .countdown { display:flex; gap:10px; margin:12px 0 25px; }
-    .count-box { width:58px; padding:9px; text-align:center; background:#242424; border-radius:10px; }
-    .count-box b { display:block; font-size:18px; }
-    .count-box span { font-size:8px; color:#aaa; text-transform:uppercase; }
-
-    .perks { padding:25px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-    .perks-grid { display:grid; grid-template-columns:repeat(4,1fr); }
-    .perk { display:flex; align-items:center; gap:13px; padding:15px 25px; border-right:1px solid var(--line); }
-    .perk:last-child { border:0; }
-    .perk svg { width:23px; }
-    .perk strong { display:block; font-size:13px; }
-    .perk span { color:#888; font-size:11px; }
-
-    .page-hero { padding:55px 0 35px; background:linear-gradient(120deg,#f8f8f6,#f1eee8); }
-    .page-hero h1 { font:800 clamp(34px,5vw,54px)/1 "Manrope"; letter-spacing:-.05em; margin-bottom:12px; }
-    .page-hero p { color:var(--muted); margin:0; }
-
-    .shop-layout { display:grid; grid-template-columns:245px 1fr; gap:32px; padding:44px 0 80px; }
-    .filter-panel {
-      align-self:start; position:sticky; top:100px;
-      border:1px solid var(--line); border-radius:18px; padding:20px;
-    }
-    .filter-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-    .filter-group { border-top:1px solid var(--line); padding:16px 0; }
-    .filter-group label { display:block; margin-bottom:8px; font-size:12px; font-weight:700; }
-    .control {
-      width:100%; height:45px; border:1px solid #ddd; border-radius:10px;
-      padding:0 12px; background:#fff; outline:none;
-    }
-    .control:focus { border-color:#111; box-shadow:0 0 0 3px #eee; }
-    textarea.control { height:90px; padding-top:12px; resize:vertical; }
-    .shop-toolbar { display:flex; align-items:center; gap:12px; justify-content:space-between; margin-bottom:22px; }
-    .search-field { position:relative; flex:1; }
-    .search-field svg { position:absolute; width:18px; left:14px; top:14px; color:#777; }
-    .search-field input { padding-left:42px; }
-    .sort { width:190px; }
-    .filter-mobile { display:none; }
-
-    .product-detail { padding:48px 0 80px; }
-    .detail-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:55px; }
-    .gallery { display:grid; grid-template-columns:90px 1fr; gap:15px; }
-    .thumbs { display:flex; flex-direction:column; gap:10px; }
-    .thumb {
-      padding:0; border:2px solid transparent; border-radius:12px; overflow:hidden;
-      aspect-ratio:.8; background:#eee;
-    }
-    .thumb.active { border-color:#111; }
-    .main-photo { border-radius:22px; overflow:hidden; background:#f4f4f2; aspect-ratio:.83; }
-    .main-photo img { height:100%; object-fit:cover; }
-    .detail-info h1 { font:800 clamp(30px,4vw,45px)/1.12 "Manrope"; letter-spacing:-.045em; margin:10px 0 13px; }
-    .detail-price { display:flex; gap:12px; align-items:center; margin:20px 0; }
-    .detail-price .price { font-size:29px; }
-    .detail-description { color:#666; line-height:1.75; border-top:1px solid var(--line); padding-top:19px; }
-    .option-label { font-size:13px; font-weight:800; margin:19px 0 10px; }
-    .options { display:flex; flex-wrap:wrap; gap:8px; }
-    .option {
-      min-width:43px; height:40px; border:1px solid #ddd; border-radius:9px;
-      background:#fff; font-weight:700;
-    }
-    .option.active { background:#111; color:#fff; border-color:#111; }
-    .color-dot { width:34px; min-width:34px; height:34px; border-radius:50%; padding:3px; background-clip:content-box; }
-    .purchase-row { display:grid; grid-template-columns:105px 1fr 1fr; gap:10px; margin:23px 0; }
-    .qty { display:flex; border:1px solid #ddd; border-radius:11px; overflow:hidden; align-items:center; justify-content:space-around; }
-    .qty button { border:0; background:#fff; font-size:20px; }
-    .info-card { border:1px solid var(--line); border-radius:14px; padding:17px; margin-top:12px; }
-    .info-card h4 { margin:0 0 6px; font-size:13px; display:flex; align-items:center; gap:8px; }
-    .info-card p { margin:0; color:#777; font-size:12px; line-height:1.5; }
-    .delivery-check { display:flex; gap:8px; margin-top:10px; }
-    .delivery-check input { flex:1; }
-
-    .tabs { margin-top:70px; }
-    .tab-buttons { display:flex; gap:25px; border-bottom:1px solid var(--line); }
-    .tab-buttons button { border:0; background:none; padding:14px 0; font-weight:700; }
-    .tab-buttons button.active { border-bottom:2px solid #111; }
-    .tab-content { padding:25px 0; line-height:1.8; color:#555; }
-    .review { border-bottom:1px solid var(--line); padding:17px 0; }
-    .review strong { color:#111; }
-
-    .cart-layout, .checkout-layout { display:grid; grid-template-columns:1fr 380px; gap:35px; padding:45px 0 85px; }
-    .cart-item {
-      display:grid; grid-template-columns:110px 1fr auto; gap:18px;
-      border-bottom:1px solid var(--line); padding:19px 0;
-    }
-    .cart-item img { height:130px; object-fit:cover; border-radius:13px; }
-    .cart-item h3 { margin:4px 0 8px; font-size:16px; }
-    .remove { border:0; background:none; color:#a33; padding:0; font-size:12px; }
-    .summary-card {
-      align-self:start; position:sticky; top:100px;
-      background:#f7f7f5; border-radius:20px; padding:25px;
-    }
-    .summary-card h2 { font-size:20px; margin-bottom:20px; }
-    .summary-line { display:flex; justify-content:space-between; margin:13px 0; color:#666; font-size:14px; }
-    .summary-total { border-top:1px solid #ddd; padding-top:16px; color:#111; font-size:18px; font-weight:800; }
-    .coupon { display:flex; gap:7px; margin:19px 0; }
-    .empty { text-align:center; padding:90px 20px; }
-    .empty svg { width:50px; height:50px; color:#aaa; }
-    .empty h2 { margin:16px 0 8px; }
-
-    .form-card { border:1px solid var(--line); border-radius:20px; padding:27px; margin-bottom:20px; }
-    .form-card h2 { font-size:20px; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .field label { display:block; font-size:11px; font-weight:800; margin-bottom:7px; color:#555; }
-    .span-2 { grid-column:span 2; }
-    .payment-option {
-      display:flex; align-items:center; gap:12px; padding:15px;
-      border:1px solid #ddd; border-radius:12px; margin-top:9px;
-    }
-    .payment-option:has(input:checked) { border-color:#111; background:#fafafa; }
-    .secure-message { display:flex; align-items:center; justify-content:center; gap:7px; color:#44745c; font-size:11px; margin-top:14px; }
-
-    .auth-wrap { max-width:460px; margin:60px auto 90px; }
-    .auth-card { border:1px solid var(--line); border-radius:24px; padding:35px; box-shadow:var(--shadow); }
-    .auth-card h1 { font:800 32px "Manrope"; letter-spacing:-.04em; margin-bottom:8px; }
-    .auth-card > p { color:#777; margin-bottom:25px; }
-    .auth-card .field { margin:14px 0; }
-    .auth-switch { text-align:center; margin-top:20px; color:#666; font-size:13px; }
-    .auth-switch button { border:0; background:none; font-weight:800; text-decoration:underline; }
-
-    .account-grid { display:grid; grid-template-columns:240px 1fr; gap:30px; padding:45px 0 80px; }
-    .account-menu { border:1px solid var(--line); border-radius:18px; padding:10px; align-self:start; }
-    .account-menu button {
-      width:100%; border:0; background:none; border-radius:10px; padding:13px;
-      display:flex; align-items:center; gap:10px; text-align:left;
-    }
-    .account-menu button.active, .account-menu button:hover { background:#111; color:#fff; }
-    .account-menu svg { width:17px; }
-    .dashboard-card { border:1px solid var(--line); border-radius:20px; padding:25px; }
-    .order-card { display:flex; gap:15px; padding:17px 0; border-bottom:1px solid var(--line); align-items:center; }
-    .order-card img { width:70px; height:80px; object-fit:cover; border-radius:10px; }
-    .status { padding:5px 9px; border-radius:20px; background:#eaf6ef; color:#187147; font-size:10px; font-weight:800; }
-
-    .confirmation {
-      max-width:750px; margin:60px auto 90px; text-align:center;
-      border:1px solid var(--line); border-radius:26px; padding:45px; box-shadow:var(--shadow);
-    }
-    .success-icon {
-      width:72px; height:72px; margin:0 auto 20px; border-radius:50%;
-      display:grid; place-items:center; background:#eaf7ee; color:#16804c;
-    }
-    .success-icon svg { width:36px; height:36px; }
-    .confirmation h1 { font:800 clamp(30px,5vw,45px) "Manrope"; letter-spacing:-.05em; }
-    .confirmation-details { margin:28px 0; background:#f8f8f6; border-radius:15px; padding:22px; text-align:left; }
-
-    .admin-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin:28px 0; }
-    .stat { border:1px solid var(--line); border-radius:16px; padding:20px; }
-    .stat span { color:#777; font-size:12px; }
-    .stat b { display:block; font:800 27px "Manrope"; margin-top:6px; }
-    .admin-table { width:100%; border-collapse:collapse; font-size:13px; }
-    .admin-table th, .admin-table td { padding:13px; border-bottom:1px solid var(--line); text-align:left; }
-    .admin-table img { width:45px; height:50px; object-fit:cover; border-radius:7px; }
-
-    .newsletter { background:#eeeae2; padding:60px 0; }
-    .newsletter-inner { display:flex; align-items:center; justify-content:space-between; gap:30px; }
-    .newsletter h2 { font:800 34px "Manrope"; letter-spacing:-.04em; margin-bottom:7px; }
-    .newsletter p { color:#666; margin:0; }
-    .subscribe { display:flex; width:min(100%,450px); }
-    .subscribe input { flex:1; border:0; padding:0 18px; border-radius:12px 0 0 12px; outline:none; }
-    .subscribe .btn { border-radius:0 12px 12px 0; }
-
-    footer { background:#111; color:#fff; padding:65px 0 25px; }
-    .footer-grid { display:grid; grid-template-columns:1.5fr repeat(3,1fr); gap:45px; }
-    .footer-about p { color:#aaa; line-height:1.7; max-width:310px; margin-top:18px; }
-    footer h4 { font-size:13px; margin-bottom:18px; }
-    .footer-links a { display:block; color:#aaa; font-size:12px; margin:11px 0; cursor:pointer; }
-    .footer-links a:hover { color:#fff; }
-    .socials { display:flex; gap:8px; margin-top:20px; }
-    .socials a { width:36px; height:36px; border:1px solid #333; border-radius:50%; display:grid; place-items:center; }
-    .socials svg { width:15px; }
-    .copyright { border-top:1px solid #292929; padding-top:22px; margin-top:45px; color:#777; font-size:11px; display:flex; justify-content:space-between; }
-
-    .toast {
-      position:fixed; z-index:100; right:22px; bottom:22px;
-      background:#111; color:#fff; border-radius:12px; padding:14px 18px;
-      font-size:13px; box-shadow:var(--shadow);
-      transform:translateY(80px); opacity:0; transition:.3s;
-    }
-    .toast.show { transform:none; opacity:1; }
-
-    .mobile-nav {
-      display:none; position:fixed; inset:0; z-index:80;
-      background:#fff; padding:20px;
-    }
-    .mobile-nav.open { display:block; animation:reveal .25s; }
-    .mobile-nav-head { display:flex; justify-content:space-between; align-items:center; }
-    .mobile-links { display:flex; flex-direction:column; padding:45px 5px; }
-    .mobile-links a { font:700 30px "Manrope"; padding:10px 0; cursor:pointer; }
-
-    @media(max-width:1050px) {
-      nav { display:none; }
-      .mobile-toggle { display:grid; }
-      .header-actions { margin-left:auto; }
-      .categories-grid { grid-template-columns:repeat(3,1fr); }
-      .product-grid { grid-template-columns:repeat(3,1fr); }
-      .hero-copy { padding-left:35px; }
-    }
-
-    @media(max-width:760px) {
-      .container { width:min(100% - 24px,1240px); }
-      .announcement { font-size:10px; }
-      .header-inner { height:64px; }
-      .header-actions .account-icon, .header-actions .wishlist-icon { display:none; }
-      .hero { grid-template-columns:1fr; min-height:0; }
-      .hero-copy { padding:65px 22px 45px; }
-      .hero h1 { font-size:50px; }
-      .hero p { font-size:15px; }
-      .hero-image { min-height:430px; }
-      section { padding:58px 0; }
-      .section-head { align-items:flex-start; }
-      .categories-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
-      .category-card { height:190px; }
-      .product-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
-      .product-card { padding:6px; border-radius:15px; }
-      .product-info { padding:10px 3px 3px; }
-      .product-info h3 { font-size:13px; }
-      .card-actions { grid-template-columns:1fr; }
-      .card-actions .btn-outline { display:none; }
-      .offer { grid-template-columns:1fr; border-radius:22px; }
-      .offer-copy { padding:40px 25px; }
-      .offer-image { height:290px; }
-      .perks-grid { grid-template-columns:repeat(2,1fr); }
-      .perk { padding:15px 10px; border-bottom:1px solid var(--line); }
-      .shop-layout { grid-template-columns:1fr; padding-top:25px; }
-      .filter-panel { display:none; position:relative; top:0; }
-      .filter-panel.open { display:block; }
-      .filter-mobile { display:inline-flex; }
-      .shop-toolbar { flex-wrap:wrap; }
-      .search-field { flex-basis:100%; }
-      .sort { flex:1; }
-      .detail-grid { grid-template-columns:1fr; gap:30px; }
-      .gallery { grid-template-columns:1fr; }
-      .thumbs { flex-direction:row; order:2; }
-      .thumb { width:62px; }
-      .purchase-row { grid-template-columns:90px 1fr; }
-      .purchase-row .buy-detail { grid-column:span 2; }
-      .cart-layout, .checkout-layout { grid-template-columns:1fr; padding-top:25px; }
-      .summary-card { position:relative; top:0; }
-      .cart-item { grid-template-columns:85px 1fr; }
-      .cart-item img { height:105px; }
-      .cart-item > .price { grid-column:2; }
-      .form-grid { grid-template-columns:1fr; }
-      .span-2 { grid-column:span 1; }
-      .account-grid { grid-template-columns:1fr; }
-      .account-menu { display:flex; overflow:auto; }
-      .account-menu button { min-width:max-content; }
-      .admin-stats { grid-template-columns:repeat(2,1fr); }
-      .table-wrap { overflow:auto; }
-      .newsletter-inner { flex-direction:column; align-items:flex-start; }
-      .subscribe { height:48px; }
-      .footer-grid { grid-template-columns:1fr 1fr; }
-      .footer-about { grid-column:span 2; }
-      .copyright { flex-direction:column; gap:8px; }
-    }
-
-    @media(max-width:390px) {
-      .hero h1 { font-size:43px; }
-      .btn { padding:0 17px; }
-      .price { font-size:15px; }
-      .old-price, .discount { font-size:10px; }
-      .footer-grid { gap:28px 18px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Athenian Salon & Academy — premium hair, skin, beauty and professional academy experiences in India.">
+<meta name="theme-color" content="#11100e">
+<meta property="og:title" content="Athenian Salon & Academy">
+<meta property="og:description" content="Your Beauty. Your Style. Your Confidence.">
+<title>Athenian Salon & Academy | Luxury Hair, Skin & Beauty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{--ink:#12110f;--cream:#f6f2eb;--paper:#fffdf9;--gold:#c5a15b;--muted:#77736b;--line:#e9e2d7;--glass:rgba(255,255,255,.12);--shadow:0 22px 70px rgba(20,15,8,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--paper);font-family:"DM Sans",sans-serif}a{text-decoration:none;color:inherit}button,input,select,textarea{font:inherit}button{cursor:pointer}img{width:100%;display:block}.wrap{width:min(1180px,calc(100% - 32px));margin:auto}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:.22em;font-weight:700;text-transform:uppercase}.serif{font-family:"Playfair Display",serif}.btn{border:1px solid var(--ink);background:var(--ink);color:white;padding:13px 20px;border-radius:999px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:.25s}.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #0002}.btn.alt{background:transparent;color:var(--ink)}.btn.gold{background:var(--gold);border-color:var(--gold);color:#18130b}.btn.small{padding:9px 14px;font-size:12px}.announcement{background:#0e0d0b;color:#fff;text-align:center;padding:9px;font-size:11px;letter-spacing:.12em}.nav{position:fixed;top:0;left:0;right:0;z-index:30;padding:15px 0;transition:.3s}.nav.scrolled{background:#111e;backdrop-filter:blur(18px);box-shadow:0 8px 30px #0002}.nav .inner{display:flex;align-items:center;gap:28px}.brand{font-family:"Playfair Display";font-size:25px;color:white;line-height:1}.brand span{display:block;font-family:"DM Sans";font-size:8px;letter-spacing:.3em;color:#d8bd82;margin-top:5px}.navlinks{margin-left:auto;display:flex;gap:24px;color:#fff;font-size:13px}.navlinks a{opacity:.9}.mobile{display:none;color:white;background:none;border:0}.hero{min-height:100vh;background:#17130f;position:relative;overflow:hidden;color:white;display:flex;align-items:center}.hero-bg{position:absolute;inset:0;background:linear-gradient(90deg,#090806dc 0%,#0908069b 42%,#09080622 100%),url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=2200&q=85") center/cover}.orb{position:absolute;border:1px solid #d8bd8240;border-radius:50%;filter:blur(.2px);animation:float 7s ease-in-out infinite}.o1{width:300px;height:300px;right:7%;top:18%}.o2{width:140px;height:140px;right:25%;bottom:18%;animation-delay:1.5s}.hero-content{position:relative;z-index:2;padding:150px 0 80px;max-width:780px}.hero h1{font:600 clamp(48px,8vw,92px)/.98 "Playfair Display";letter-spacing:-.04em;margin:18px 0}.hero p{font-size:18px;line-height:1.7;color:#e6e1d8;max-width:620px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.offer-badge{display:inline-flex;border:1px solid #d8bd8270;background:#ffffff12;backdrop-filter:blur(12px);border-radius:999px;padding:8px 13px;color:#f4dfad;font-size:11px;letter-spacing:.12em}.float-cards{position:absolute;right:4%;bottom:11%;display:grid;gap:10px;z-index:3}.float-card{background:#ffffff12;border:1px solid #ffffff26;backdrop-filter:blur(15px);border-radius:16px;padding:12px 15px;min-width:190px;color:#fff;box-shadow:0 15px 50px #0003}.float-card b{font-size:13px}.float-card small{display:block;color:#cfc8bc;margin-top:3px}.scroll{position:absolute;bottom:24px;left:50%;font-size:10px;letter-spacing:.2em;color:#d8bd82;animation:bob 2s infinite}.section{padding:92px 0}.section.alt{background:var(--cream)}.head{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:34px}.head h2{font:600 clamp(32px,4vw,52px) "Playfair Display";margin:8px 0}.head p{color:var(--muted);max-width:540px;line-height:1.7;margin:0}.trust{display:grid;grid-template-columns:1.2fr repeat(4,1fr);gap:14px;align-items:stretch}.trust-intro,.stat{border:1px solid var(--line);border-radius:22px;padding:27px;background:#fff}.trust-intro h2{font:600 32px "Playfair Display";margin:8px 0}.trust-intro p{color:var(--muted);line-height:1.6}.stat{display:flex;flex-direction:column;justify-content:center}.stat strong{font:600 29px "Playfair Display";color:#8c6b2d}.stat span{font-size:12px;color:var(--muted);margin-top:6px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.tab{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 16px;font-size:12px}.tab.active{background:#111;color:#fff;border-color:#111}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.card{border:1px solid var(--line);background:white;border-radius:22px;overflow:hidden;transition:.3s}.card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}.photo{height:245px;position:relative;overflow:hidden}.photo img{height:100%;object-fit:cover;transition:.6s}.card:hover .photo img{transform:scale(1.06)}.chip{position:absolute;top:12px;left:12px;background:#fff;color:#6e4e16;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800}.cardbody{padding:18px}.cardbody h3{font:600 21px "Playfair Display";margin:4px 0 7px}.desc{color:var(--muted);font-size:12px;line-height:1.55;min-height:38px}.price{font-weight:800;margin:13px 0}.old{text-decoration:line-through;color:#aaa;font-weight:500;margin-left:7px}.cardbody .btn{width:100%;justify-content:center}.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.offer{padding:28px;border-radius:24px;background:#15130f;color:white;min-height:210px;position:relative;overflow:hidden}.offer:after{content:"✦";position:absolute;right:-20px;bottom:-55px;font:180px "Playfair Display";color:#c5a15b18}.offer h3{font:600 27px "Playfair Display";margin:10px 0}.offer strong{font-size:24px;color:#e2c47d}.banner{margin-top:18px;padding:42px;border-radius:26px;background:linear-gradient(110deg,#15130f,#3a2c17);color:white;display:flex;align-items:center;justify-content:space-between;gap:20px}.banner h2{font:600 40px "Playfair Display";margin:5px 0}.transform{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.transform .card .photo{height:320px}.booking{display:grid;grid-template-columns:.85fr 1.15fr;gap:25px}.booking-copy{background:#15130f;color:white;border-radius:25px;padding:40px}.booking-copy h2{font:600 48px "Playfair Display";margin:10px 0}.booking-copy p{color:#ccc;line-height:1.7}.glass{border:1px solid var(--line);background:#fff;border-radius:25px;padding:28px;box-shadow:var(--shadow)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;color:#666;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ddd;border-radius:12px;padding:12px;background:#fff;outline:none}.field textarea{min-height:90px;resize:vertical}.span2{grid-column:span 2}.booking-confirm{display:none;text-align:center;padding:35px}.booking-confirm.show{display:block}.booking-confirm .icon{width:65px;height:65px;border-radius:50%;background:#e9f6ec;display:grid;place-items:center;margin:0 auto 15px;color:#247545}.branches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.branch{border:1px solid var(--line);border-radius:20px;padding:22px;background:white}.branch h3{font:600 22px "Playfair Display";margin:0 0 8px}.branch p{color:var(--muted);font-size:12px;line-height:1.55;min-height:38px}.branch-actions{display:flex;gap:7px;flex-wrap:wrap}.highlight{border:2px solid #c5a15b;background:linear-gradient(135deg,#fff,#f8f0df)}.academy{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:center}.academy-img{border-radius:25px;overflow:hidden;height:510px}.academy-img img{height:100%;object-fit:cover}.academy-copy h2{font:600 55px "Playfair Display";margin:10px 0}.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:25px 0}.feature{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff}.feature b{font-size:13px}.feature p{font-size:11px;color:var(--muted);margin:5px 0 0}.gallery{columns:3 250px;column-gap:15px}.gallery-item{break-inside:avoid;margin-bottom:15px;border-radius:17px;overflow:hidden;cursor:pointer;position:relative}.gallery-item img{transition:.4s}.gallery-item:hover img{transform:scale(1.04)}.why{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.why .card{padding:25px}.why i{color:var(--gold)}.reviews{text-align:center;border:1px solid var(--line);border-radius:25px;padding:50px;background:#fff}.reviews .stars{color:#b58c3c;font-size:22px;letter-spacing:5px}.reviews p{font:600 26px "Playfair Display";max-width:650px;margin:17px auto}.footer{background:#11100e;color:white;padding:65px 0 25px}.footergrid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:30px}.footer h3{font:600 22px "Playfair Display";margin:0 0 12px}.footer a,.footer p{color:#bcb7ad;font-size:12px;line-height:2;display:block}.footer-bottom{border-top:1px solid #ffffff16;margin-top:35px;padding-top:18px;color:#777;font-size:11px;display:flex;justify-content:space-between}.fab{position:fixed;right:17px;bottom:17px;z-index:25;display:grid;gap:8px}.fab a{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#111;color:#fff;box-shadow:0 10px 25px #0003}.fab a:nth-child(2){background:#25d366}.modal{position:fixed;inset:0;background:#000b;z-index:80;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:24px;padding:25px;position:relative}.close{position:absolute;right:15px;top:15px;border:0;background:#eee;border-radius:50%;width:36px;height:36px}.admin{padding:110px 0 80px;display:none}.admin.show{display:block}.adminbar{display:flex;justify-content:space-between;align-items:center;gap:15px}.admin-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}.admin-table th,.admin-table td{padding:12px;border-bottom:1px solid var(--line);text-align:left}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:#fff;padding:12px 18px;border-radius:999px;z-index:100;transition:.3s;font-size:12px}.toast.show{transform:translateX(-50%) translateY(0)}@keyframes float{50%{transform:translateY(-20px) rotate(3deg)}}@keyframes bob{50%{transform:translate(-50%,8px)}}@media(max-width:900px){.navlinks{display:none}.mobile{display:block;margin-left:auto}.grid{grid-template-columns:repeat(2,1fr)}.trust{grid-template-columns:1fr 1fr}.trust-intro{grid-column:span 2}.offers,.branches,.why{grid-template-columns:1fr 1fr}.booking,.academy{grid-template-columns:1fr}.academy-img{height:380px}.float-cards{right:15px;bottom:90px}.footergrid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.nav{padding:11px 0}.brand{font-size:21px}.hero-content{padding-top:135px}.hero h1{font-size:50px}.hero p{font-size:15px}.float-cards{display:none}.section{padding:65px 0}.head{display:block}.head .btn{margin-top:15px}.grid,.offers,.branches,.why,.trust{grid-template-columns:1fr}.trust-intro{grid-column:auto}.photo{height:220px}.transform{grid-template-columns:1fr}.transform .card .photo{height:270px}.banner{display:block}.banner h2{font-size:31px}.formgrid{grid-template-columns:1fr}.span2{grid-column:auto}.booking-copy h2,.academy-copy h2{font-size:42px}.footergrid{grid-template-columns:1fr}.footer-bottom{display:block}.footer-bottom span{display:block;margin-top:6px}.hero-actions .btn{width:100%;justify-content:center}.fab{right:10px}.adminbar{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
 <body>
-  <div class="announcement">COMPLIMENTARY SHIPPING ON ORDERS ABOVE $99 · EASY 30-DAY RETURNS</div>
+<div class="announcement">MONTHLY OFFER — 20% OFF <span style="color:#c5a15b">•</span> BOOK YOUR BEAUTY EXPERIENCE</div>
+<nav class="nav" id="nav"><div class="wrap inner">
+<a href="#home" class="brand">ATHENIAN<span>SALON & ACADEMY</span></a>
+<div class="navlinks"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#offers">Offers</a><a href="#gallery">Gallery</a><a href="#branches">Branches</a><a href="#reviews">Reviews</a><a href="#academy">Academy</a></div>
+<a class="btn gold small" href="#booking">BOOK NOW</a><button class="mobile" onclick="document.querySelector('.navlinks').style.display=document.querySelector('.navlinks').style.display==='flex'?'none':'flex'"><i data-lucide="menu"></i></button>
+</div></nav>
 
-  <header>
-    <div class="container header-inner">
-      <div class="logo" onclick="navigate('home')">TrendVault<small>by luxury.com</small></div>
-      <nav>
-        <a onclick="navigate('home')">Home</a>
-        <a onclick="navigate('shop')">Shop</a>
-        <a onclick="scrollHome('categories')">Categories</a>
-        <a onclick="shopFilter('New Arrival')">New Arrivals</a>
-        <a onclick="shopFilter('Best Seller')">Best Sellers</a>
-        <a onclick="scrollHome('about')">About</a>
-        <a onclick="scrollHome('footer')">Contact</a>
-      </nav>
-      <div class="header-actions">
-        <button class="icon-btn" aria-label="Search" onclick="navigate('shop');setTimeout(()=>document.getElementById('searchInput').focus(),100)"><i data-lucide="search"></i></button>
-        <button class="icon-btn wishlist-icon" aria-label="Wishlist" onclick="showWishlist()"><i data-lucide="heart"></i><span class="badge" id="wishCount">0</span></button>
-        <button class="icon-btn" aria-label="Cart" onclick="navigate('cart')"><i data-lucide="shopping-bag"></i><span class="badge" id="cartCount">0</span></button>
-        <button class="icon-btn account-icon" aria-label="Account" onclick="navigate('account')"><i data-lucide="user"></i></button>
-        <button class="icon-btn mobile-toggle" aria-label="Menu" onclick="toggleMobile()"><i data-lucide="menu"></i></button>
-      </div>
-    </div>
-  </header>
+<main id="home">
+<section class="hero"><div class="hero-bg"></div><div class="orb o1"></div><div class="orb o2"></div><div class="wrap hero-content">
+<span class="offer-badge">MONTHLY OFFER — 20% OFF</span>
+<div class="eyebrow" style="margin-top:25px">ATHENIAN SALON & ACADEMY</div>
+<h1>Your Beauty.<br>Your Style.<br><em>Your Confidence.</em></h1>
+<p>Premium Hair, Skin & Beauty Experiences at Athenian Salon & Academy — designed around modern techniques, professional expertise and your individual style.</p>
+<div class="hero-actions"><a class="btn gold" href="#booking">BOOK APPOINTMENT <i data-lucide="arrow-up-right"></i></a><a class="btn alt" style="border-color:#ffffff66;color:#fff" href="#services">EXPLORE SERVICES</a></div>
+</div><div class="float-cards"><div class="float-card">✓ <b>Hair Styling</b><small>Signature salon care</small></div><div class="float-card">✓ <b>Skin Care</b><small>Advanced facial experiences</small></div><div class="float-card">✓ <b>Bridal Beauty</b><small>Occasion-ready styling</small></div><div class="float-card">✓ <b>Luxury Treatments</b><small>Premium hair & body care</small></div></div><div class="scroll">SCROLL ↓</div></section>
 
-  <div class="mobile-nav" id="mobileNav">
-    <div class="mobile-nav-head">
-      <div class="logo">TrendVault<small>by luxury.com</small></div>
-      <button class="icon-btn" onclick="toggleMobile()"><i data-lucide="x"></i></button>
-    </div>
-    <div class="mobile-links">
-      <a onclick="mobileGo('home')">Home</a>
-      <a onclick="mobileGo('shop')">Shop All</a>
-      <a onclick="mobileGo('shop','New Arrival')">New Arrivals</a>
-      <a onclick="mobileGo('shop','Best Seller')">Best Sellers</a>
-      <a onclick="mobileGo('account')">My Account</a>
-      <a onclick="mobileGo('admin')">Admin Portal</a>
-    </div>
-  </div>
+<section class="section" id="about"><div class="wrap"><div class="trust"><div class="trust-intro"><span class="eyebrow">THE ATHENIAN STANDARD</span><h2>Beauty Care, Elevated.</h2><p>Athenian Salon & Academy brings together professional hair, skin, beauty and styling services with a refined salon experience.</p></div><div class="stat"><strong>12+</strong><span>Locations</span></div><div class="stat"><strong>Premium</strong><span>Beauty Services</span></div><div class="stat"><strong>Professional</strong><span>Stylists</span></div><div class="stat"><strong>Hair + Skin</strong><span>Expertise</span></div></div></div></section>
 
-  <main>
-    <div class="view active" id="homeView">
-      <div class="hero">
-        <div class="hero-copy">
-          <div class="eyebrow">The new luxury edit</div>
-          <h1>Upgrade Your Everyday Style</h1>
-          <p>Discover premium fashion, beauty, accessories and lifestyle products at prices you'll love.</p>
-          <div class="hero-buttons">
-            <button class="btn" onclick="navigate('shop')">Shop Now <i data-lucide="arrow-up-right"></i></button>
-            <button class="btn btn-outline" onclick="scrollHome('categories')">Explore Collection</button>
-          </div>
-        </div>
-        <div class="hero-image">
-          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85" alt="Premium fashion collection">
-          <div class="floating-note"><strong>Spring / Summer '26</strong><span>New collection now available</span></div>
-        </div>
-      </div>
+<section class="section alt" id="services"><div class="wrap"><div class="head"><div><span class="eyebrow">SIGNATURE MENU</span><h2>Curated Services</h2></div><p>Choose your category, explore the menu and book directly. Prices marked as “from” or “contact” are intentionally not treated as fixed discounts.</p></div><div class="tabs" id="serviceTabs"></div><div class="grid" id="serviceGrid"></div></div></section>
 
-      <section id="categories">
-        <div class="container">
-          <div class="section-head">
-            <div><h2>Shop by Category</h2><p>Curated essentials for a considered lifestyle.</p></div>
-            <button class="text-link" onclick="navigate('shop')">View all</button>
-          </div>
-          <div class="categories-grid" id="categoryGrid"></div>
-        </div>
-      </section>
+<section class="section" id="offers"><div class="wrap"><div class="head"><div><span class="eyebrow">LIMITED BEAUTY EDIT</span><h2>Exclusive Beauty Offers</h2></div></div><div class="offers" id="offerGrid"></div><div class="banner"><div><span class="eyebrow">THIS MONTH</span><h2>Get 20% OFF</h2><p style="color:#c9c2b6;margin:0">Offer visibility only — final discount is applied only when configured by the salon.</p></div><a class="btn gold" href="#booking">CLAIM OFFER</a></div></div></section>
 
-      <section style="background:#fafafa">
-        <div class="container">
-          <div class="section-head">
-            <div><h2>Featured Products</h2><p>Editor-selected pieces worth discovering.</p></div>
-            <button class="text-link" onclick="navigate('shop')">Shop all</button>
-          </div>
-          <div class="product-grid" id="featuredGrid"></div>
-        </div>
-      </section>
+<section class="section alt"><div class="wrap"><div class="head"><div><span class="eyebrow">TRANSFORMATIONS</span><h2>Before / After Style</h2></div></div><div class="transform" id="transformGrid"></div></div></section>
 
-      <section>
-        <div class="container">
-          <div class="section-head">
-            <div><h2>Trending Products</h2><p>What everyone is adding to their vault.</p></div>
-          </div>
-          <div class="product-grid" id="trendingGrid"></div>
-        </div>
-      </section>
+<section class="section" id="booking"><div class="wrap"><div class="booking"><div class="booking-copy"><span class="eyebrow">YOUR NEXT APPOINTMENT</span><h2>Reserve your beauty time.</h2><p>Choose a branch, service, date and time. Your request receives a unique booking ID. Live payment and notifications become active once the owner's integrations are configured.</p><div style="margin-top:30px;color:#d8bd82">🔒 Secure booking architecture</div><div style="margin-top:10px;color:#aaa;font-size:12px">Razorpay • WhatsApp Business • Email API • Supabase</div></div><div class="glass"><div id="bookingFormWrap"><form id="bookingForm"><div class="formgrid"><div class="field"><label>FULL NAME</label><input name="name" required placeholder="Your name"></div><div class="field"><label>PHONE NUMBER</label><input name="phone" required placeholder="+91"></div><div class="field"><label>EMAIL</label><input name="email" type="email" required placeholder="you@example.com"></div><div class="field"><label>BRANCH</label><select name="branch" id="branchSelect" required></select></div><div class="field"><label>SERVICE</label><select name="service" id="serviceSelect" required></select></div><div class="field"><label>PREFERRED DATE</label><input name="date" type="date" required></div><div class="field"><label>PREFERRED TIME</label><input name="time" type="time" required></div><div class="field"><label>NUMBER OF PEOPLE</label><select name="people"><option>1</option><option>2</option><option>3</option><option>4</option></select></div><div class="field span2"><label>ADDITIONAL MESSAGE</label><textarea name="message" placeholder="Anything we should know?"></textarea></div><div class="field span2"><label>PAYMENT PREFERENCE</label><select name="payment"><option>Pay at Salon</option><option>Booking Deposit — configure in Admin</option><option>Full Payment — configure in Admin</option></select></div><div class="span2"><button class="btn gold" style="width:100%;justify-content:center">CONFIRM BOOKING <i data-lucide="arrow-right"></i></button></div></div></form></div><div class="booking-confirm" id="bookingConfirm"><div class="icon"><i data-lucide="check"></i></div><h2 class="serif">Your appointment request has been received.</h2><p id="bookingMessage"></p><a class="btn" href="#home">BACK TO HOME</a></div></div></div></div></section>
 
-      <section style="padding-top:20px">
-        <div class="container">
-          <div class="offer">
-            <div class="offer-copy">
-              <small>LIMITED TIME OFFER</small>
-              <h2>Up to 50% OFF</h2>
-              <p>On selected premium products, while stocks last.</p>
-              <div class="countdown" id="countdown"></div>
-              <div><button class="btn btn-light" onclick="shopFilter('Deal')">Shop Deals <i data-lucide="arrow-right"></i></button></div>
-            </div>
-            <div class="offer-image"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=85" alt="Limited time fashion offer"></div>
-          </div>
-        </div>
-      </section>
+<section class="section alt" id="branches"><div class="wrap"><div class="head"><div><span class="eyebrow">FIND YOUR ATHENIAN</span><h2>Our Branches</h2></div></div><div class="branches" id="branchGrid"></div></div></section>
 
-      <section>
-        <div class="container">
-          <div class="section-head"><div><h2>Best Sellers</h2><p>Beloved by our community.</p></div></div>
-          <div class="product-grid" id="bestGrid"></div>
-        </div>
-      </section>
+<section class="section"><div class="wrap"><div class="academy" id="academy"><div class="academy-img"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85" alt="Professional salon academy"></div><div class="academy-copy"><span class="eyebrow">SALON + ACADEMY</span><h2>Learn. Create. Become Professional.</h2><p style="color:#777;line-height:1.8">Athenian also operates as an academy focused on professional training, beauty education, hair training, practical learning and career development.</p><div class="features"><div class="feature"><b>Professional Training</b><p>Structured practical learning.</p></div><div class="feature"><b>Beauty Education</b><p>Modern salon knowledge.</p></div><div class="feature"><b>Hair Training</b><p>Hands-on technical practice.</p></div><div class="feature"><b>Career Development</b><p>Build professional confidence.</p></div></div><button class="btn gold" onclick="toast('Course enquiry form can be connected to the configured owner contact.')">ENQUIRE ABOUT COURSES</button></div></div></div></section>
 
-      <section style="background:#fafafa">
-        <div class="container">
-          <div class="section-head"><div><h2>New Arrivals</h2><p>Fresh additions, just landed.</p></div></div>
-          <div class="product-grid" id="newGrid"></div>
-        </div>
-      </section>
+<section class="section" id="gallery"><div class="wrap"><div class="head"><div><span class="eyebrow">VISUAL JOURNAL</span><h2>Gallery</h2></div><p>Placeholder imagery is used until the owner uploads authentic salon work through the admin area.</p></div><div class="gallery" id="galleryGrid"></div></div></section>
 
-      <section id="about">
-        <div class="container">
-          <div class="section-head"><div><h2>The TrendVault Standard</h2><p>Premium curation without the traditional markup.</p></div></div>
-          <div class="perks-grid">
-            <div class="perk"><i data-lucide="truck"></i><div><strong>Free Shipping</strong><span>On orders above $99</span></div></div>
-            <div class="perk"><i data-lucide="rotate-ccw"></i><div><strong>Easy Returns</strong><span>30-day returns</span></div></div>
-            <div class="perk"><i data-lucide="shield-check"></i><div><strong>Secure Payments</strong><span>Encrypted checkout</span></div></div>
-            <div class="perk"><i data-lucide="banknote"></i><div><strong>Cash on Delivery</strong><span>Available on eligible orders</span></div></div>
-          </div>
-        </div>
-      </section>
-    </div>
+<section class="section alt"><div class="wrap"><div class="head"><div><span class="eyebrow">THE DIFFERENCE</span><h2>Why Choose Us</h2></div></div><div class="why" id="whyGrid"></div></div></section>
 
-    <div class="view" id="shopView">
-      <div class="page-hero"><div class="container"><h1>Shop the Collection</h1><p>Explore premium essentials, thoughtfully selected for you.</p></div></div>
-      <div class="container shop-layout">
-        <aside class="filter-panel" id="filters">
-          <div class="filter-title"><strong>Filters</strong><button class="text-link" onclick="clearFilters()">Clear</button></div>
-          <div class="filter-group"><label>Category</label><select class="control" id="categoryFilter" onchange="renderShop()"><option value="">All categories</option></select></div>
-          <div class="filter-group"><label>Maximum price: $<span id="priceLabel">500</span></label><input style="width:100%" type="range" min="25" max="500" value="500" id="priceFilter" oninput="priceLabel.textContent=this.value;renderShop()"></div>
-          <div class="filter-group"><label>Brand</label><select class="control" id="brandFilter" onchange="renderShop()"><option value="">All brands</option></select></div>
-          <div class="filter-group"><label>Minimum rating</label><select class="control" id="ratingFilter" onchange="renderShop()"><option value="0">Any rating</option><option value="4">4★ & above</option><option value="4.5">4.5★ & above</option></select></div>
-          <div class="filter-group"><label>Size</label><select class="control" id="sizeFilter" onchange="renderShop()"><option value="">All sizes</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
-          <div class="filter-group"><label>Color</label><select class="control" id="colorFilter" onchange="renderShop()"><option value="">All colors</option><option>Black</option><option>White</option><option>Brown</option><option>Blue</option><option>Gold</option></select></div>
-          <div class="filter-group"><label>Availability</label><select class="control" id="stockFilter" onchange="renderShop()"><option value="">All products</option><option value="in">In stock</option></select></div>
-        </aside>
-        <div>
-          <div class="shop-toolbar">
-            <div class="search-field"><i data-lucide="search"></i><input class="control" id="searchInput" placeholder="Search products, categories, brands..." oninput="renderShop()"></div>
-            <button class="btn btn-outline btn-sm filter-mobile" onclick="filters.classList.toggle('open')"><i data-lucide="sliders-horizontal"></i> Filters</button>
-            <select class="control sort" id="sortFilter" onchange="renderShop()">
-              <option value="popular">Most popular</option>
-              <option value="newest">Newest</option>
-              <option value="low">Price: low to high</option>
-              <option value="high">Price: high to low</option>
-              <option value="rating">Top rated</option>
-            </select>
-          </div>
-          <p id="resultCount" style="color:#777;font-size:12px"></p>
-          <div class="product-grid" id="shopGrid"></div>
-        </div>
-      </div>
-    </div>
+<section class="section" id="reviews"><div class="wrap"><div class="reviews"><span class="eyebrow">CLIENT VOICE</span><h2 class="serif" style="font-size:42px;margin:8px">Loved By Our Clients</h2><div class="stars">★★★★★</div><p>“Your review could be featured here.”</p><button class="btn alt" onclick="openReview()">WRITE A REVIEW</button></div></div></section>
+</main>
 
-    <div class="view" id="productView"><div class="container product-detail" id="productDetail"></div></div>
+<footer class="footer" id="contact"><div class="wrap"><div class="footergrid"><div><a class="brand" href="#home">ATHENIAN<span>SALON & ACADEMY</span></a><p style="margin-top:20px">Premium hair, skin, beauty and academy experiences across India.</p></div><div><h3>Explore</h3><a href="#services">Services</a><a href="#offers">Offers</a><a href="#gallery">Gallery</a><a href="#branches">Branches</a></div><div><h3>Support</h3><a href="#academy">Academy</a><a href="#booking">Book Appointment</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a></div><div><h3>Guwahati</h3><p>GS Road, Christian Basti,<br>Guwahati, Assam 781005</p><a href="tel:8099334345">8099334345</a><a href="tel:8011110064">8011110064</a><a href="tel:8867641331">8867641331</a><a href="tel:9387969382">9387969382</a></div></div><div class="footer-bottom"><span>© Athenian Salon & Academy</span><span>Privacy Policy • Terms & Conditions • Cancellation Policy</span></div></div></footer>
 
-    <div class="view" id="cartView">
-      <div class="page-hero"><div class="container"><h1>Your Shopping Bag</h1><p>Review your selected pieces before checkout.</p></div></div>
-      <div class="container" id="cartContent"></div>
-    </div>
+<div class="fab"><a href="tel:8099334345" title="Call"><i data-lucide="phone"></i></a><a href="https://wa.me/918099334345" target="_blank" title="WhatsApp"><i data-lucide="message-circle"></i></a><a href="#booking" title="Book"><i data-lucide="calendar-days"></i></a></div>
+<div class="modal" id="modal"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<div class="admin" id="admin"><div class="wrap"><div class="adminbar"><div><span class="eyebrow">PRIVATE CONTROL CENTER</span><h1 class="serif" style="font-size:48px;margin:6px 0">Admin Dashboard</h1></div><button class="btn alt" onclick="closeAdmin()">Close</button></div><div class="glass" style="margin-top:20px"><h3>Owner Settings</h3><div class="formgrid"><div class="field"><label>OWNER EMAIL</label><input id="ownerEmail" placeholder="Configured by owner"></div><div class="field"><label>WHATSAPP BUSINESS NUMBER</label><input id="ownerWhatsApp" placeholder="Configured by owner"></div><div class="field"><label>RAZORPAY KEY ID</label><input id="razorpayKey" placeholder="Never commit secrets to Git"></div><div class="field"><label>PAYMENT MODE</label><select id="paymentMode"><option>Pay at Salon</option><option>Booking Deposit</option><option>Full Payment</option></select></div><div class="span2"><button class="btn gold" onclick="saveSettings()">SAVE SETTINGS</button></div></div><p style="font-size:11px;color:#888">Production note: secrets must be stored as server-side environment variables, not in this static frontend.</p></div><div class="glass" style="margin-top:20px"><h3>Bookings</h3><button class="btn small" onclick="exportBookings()">EXPORT BOOKINGS</button><table class="admin-table"><thead><tr><th>ID</th><th>Customer</th><th>Branch</th><th>Service</th><th>Date/Time</th><th>Status</th></tr></thead><tbody id="bookingTable"></tbody></table></div></div></div>
+<div class="toast" id="toast"></div>
 
-    <div class="view" id="checkoutView">
-      <div class="page-hero"><div class="container"><h1>Secure Checkout</h1><p>Complete your order in just a few steps.</p></div></div>
-      <div class="container checkout-layout">
-        <form id="checkoutForm" onsubmit="placeOrder(event)">
-          <div class="form-card">
-            <h2>Contact & delivery details</h2>
-            <div class="form-grid">
-              <div class="field"><label>FULL NAME</label><input class="control" name="name" required placeholder="Alex Morgan"></div>
-              <div class="field"><label>MOBILE NUMBER</label><input class="control" name="mobile" required placeholder="+1 555 012 3456"></div>
-              <div class="field span-2"><label>EMAIL ADDRESS</label><input class="control" name="email" type="email" required placeholder="alex@example.com"></div>
-              <div class="field span-2"><label>COMPLETE ADDRESS</label><textarea class="control" name="address" required placeholder="Apartment, street and neighborhood"></textarea></div>
-              <div class="field"><label>CITY</label><input class="control" name="city" required></div>
-              <div class="field"><label>STATE</label><input class="control" name="state" required></div>
-              <div class="field"><label>ZIP / PIN CODE</label><input class="control" name="pin" required></div>
-            </div>
-          </div>
-          <div class="form-card">
-            <h2>Payment method</h2>
-            <label class="payment-option"><input type="radio" name="payment" value="UPI" checked> <i data-lucide="smartphone"></i><span><strong>UPI</strong><br><small>Pay using your UPI app</small></span></label>
-            <label class="payment-option"><input type="radio" name="payment" value="Credit/Debit Card"> <i data-lucide="credit-card"></i><span><strong>Credit / Debit Card</strong><br><small>Visa, Mastercard, Amex</small></span></label>
-            <label class="payment-option"><input type="radio" name="payment" value="Net Banking"> <i data-lucide="landmark"></i><span><strong>Net Banking</strong><br><small>All major banks supported</small></span></label>
-            <label class="payment-option"><input type="radio" name="payment" value="Cash on Delivery"> <i data-lucide="banknote"></i><span><strong>Cash on Delivery</strong><br><small>Pay when your order arrives</small></span></label>
-          </div>
-        </form>
-        <aside class="summary-card" id="checkoutSummary"></aside>
-      </div>
-    </div>
-
-    <div class="view" id="accountView"><div class="container" id="accountContent"></div></div>
-    <div class="view" id="confirmationView"><div class="container" id="confirmationContent"></div></div>
-
-    <div class="view" id="adminView">
-      <div class="page-hero"><div class="container"><h1>Commerce Admin</h1><p>Manage products, orders and customers.</p></div></div>
-      <div class="container" style="padding:35px 0 80px">
-        <div class="admin-stats" id="adminStats"></div>
-        <div class="dashboard-card">
-          <div class="section-head" style="margin-bottom:15px"><div><h2 style="font-size:25px">Product management</h2><p>Catalog and inventory overview</p></div><button class="btn btn-sm" onclick="addAdminProduct()">Add Product</button></div>
-          <div class="table-wrap"><table class="admin-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Inventory</th><th>Status</th></tr></thead><tbody id="adminProducts"></tbody></table></div>
-        </div>
-        <div class="dashboard-card" style="margin-top:20px">
-          <h2 style="font-size:25px">Order management</h2>
-          <div class="table-wrap"><table class="admin-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead><tbody id="adminOrders"></tbody></table></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <div class="newsletter">
-    <div class="container newsletter-inner">
-      <div><h2>Inside the Vault</h2><p>Get the latest deals directly in your inbox.</p></div>
-      <form class="subscribe" onsubmit="subscribe(event)"><input type="email" required placeholder="Your email address"><button class="btn">Subscribe</button></form>
-    </div>
-  </div>
-
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-about">
-          <div class="logo">TrendVault<small>by luxury.com</small></div>
-          <p>Premium fashion, beauty and lifestyle pieces curated for modern everyday living.</p>
-          <div class="socials">
-            <a aria-label="Instagram"><i data-lucide="instagram"></i></a>
-            <a aria-label="Facebook"><i data-lucide="facebook"></i></a>
-            <a aria-label="YouTube"><i data-lucide="youtube"></i></a>
-            <a aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
-          </div>
-        </div>
-        <div class="footer-links"><h4>Quick Links</h4><a onclick="navigate('shop')">Shop</a><a onclick="shopFilter('New Arrival')">New Arrivals</a><a onclick="shopFilter('Best Seller')">Best Sellers</a><a onclick="scrollHome('about')">About TrendVault</a><a onclick="navigate('admin')">Admin Portal</a></div>
-        <div class="footer-links"><h4>Customer Support</h4><a>Contact Us</a><a>FAQ</a><a onclick="navigate('account')">My Orders</a><a onclick="navigate('account')">Order Tracking</a><a>Shipping & Delivery</a></div>
-        <div class="footer-links"><h4>Legal & Policies</h4><a>Returns & Refunds</a><a>Privacy Policy</a><a>Terms & Conditions</a><a>Accessibility</a></div>
-      </div>
-      <div class="copyright"><span>© 2026 TrendVault by luxury.com. All rights reserved.</span><span>USD · United States</span></div>
-    </div>
-  </footer>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    const baseProducts = [
-      {id:1,name:"Signature Wool Blend Coat",brand:"Atelier No. 7",category:"Women's Clothing",price:189,old:260,rating:4.8,reviews:128,tag:"Best Seller",stock:14,colors:["Black","Brown"],sizes:["XS","S","M","L"],image:"https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=800&q=85"},
-      {id:2,name:"Minimal Leather Chronograph",brand:"Montre",category:"Watches",price:149,old:215,rating:4.7,reviews:84,tag:"Trending",stock:9,colors:["Black","Gold"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=85"},
-      {id:3,name:"Studio Leather Crossbody",brand:"Aera",category:"Accessories",price:118,old:165,rating:4.9,reviews:202,tag:"Best Seller",stock:18,colors:["Brown","Black"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=85"},
-      {id:4,name:"Essential Runner Sneaker",brand:"Form",category:"Shoes",price:96,old:140,rating:4.6,reviews:94,tag:"Trending",stock:24,colors:["White","Black"],sizes:["S","M","L","XL"],image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85"},
-      {id:5,name:"Structured Linen Blazer",brand:"North & Row",category:"Men's Clothing",price:135,old:195,rating:4.5,reviews:67,tag:"New Arrival",stock:8,colors:["Brown","Blue"],sizes:["S","M","L","XL"],image:"https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=85"},
-      {id:6,name:"Radiance Ritual Skincare Set",brand:"Élan Beauty",category:"Beauty",price:72,old:104,rating:4.8,reviews:174,tag:"Deal",stock:31,colors:["White"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=800&q=85"},
-      {id:7,name:"Sculpted Gold Hoop Earrings",brand:"Oro",category:"Jewellery",price:78,old:120,rating:4.7,reviews:53,tag:"New Arrival",stock:11,colors:["Gold"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=85"},
-      {id:8,name:"QuietSound Studio Headphones",brand:"Aural",category:"Electronics",price:199,old:299,rating:4.6,reviews:245,tag:"Deal",stock:16,colors:["Black","White"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=85"},
-      {id:9,name:"Cashmere Everyday Sweater",brand:"Atelier No. 7",category:"Fashion",price:110,old:155,rating:4.9,reviews:116,tag:"Best Seller",stock:13,colors:["Brown","White"],sizes:["XS","S","M","L"],image:"https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=85"},
-      {id:10,name:"Architectural Table Lamp",brand:"Luma Home",category:"Home & Lifestyle",price:89,old:125,rating:4.4,reviews:48,tag:"New Arrival",stock:7,colors:["Black","White"],sizes:["One Size"],image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=85"},
-      {id:11,name:"Classic Oxford Shirt",brand:"North & Row",category:"Men's Clothing",price:68,old:92,rating:4.5,reviews:89,tag:"Trending",stock:27,colors:["White","Blue"],sizes:["S","M","L","XL"],image:"https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=800&q=85"},
-      {id:12,name:"Silk Evening Dress",brand:"Maison Line",category:"Women's Clothing",price:175,old:250,rating:4.8,reviews:72,tag:"New Arrival",stock:6,colors:["Black","Blue"],sizes:["XS","S","M","L"],image:"https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=85"}
-    ];
-
-    let products = JSON.parse(localStorage.getItem("tv_products")) || baseProducts;
-    let cart = JSON.parse(localStorage.getItem("tv_cart")) || [];
-    let wishlist = JSON.parse(localStorage.getItem("tv_wishlist")) || [];
-    let orders = JSON.parse(localStorage.getItem("tv_orders")) || [];
-    let user = JSON.parse(localStorage.getItem("tv_user")) || null;
-    let coupon = null;
-    let selectedProduct = products[0];
-    let detailQty = 1;
-
-    const categories = [
-      ["Fashion","https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=500&q=80"],
-      ["Men's Clothing","https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=500&q=80"],
-      ["Women's Clothing","https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80"],
-      ["Shoes","https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=500&q=80"],
-      ["Watches","https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=500&q=80"],
-      ["Jewellery","https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80"],
-      ["Beauty","https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=500&q=80"],
-      ["Electronics","https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=500&q=80"],
-      ["Home & Lifestyle","https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=500&q=80"],
-      ["Accessories","https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?auto=format&fit=crop&w=500&q=80"]
-    ];
-
-    const money = n => "$" + Number(n).toFixed(2);
-    const discount = p => Math.round((1-p.price/p.old)*100);
-
-    function saveState(){
-      localStorage.setItem("tv_cart",JSON.stringify(cart));
-      localStorage.setItem("tv_wishlist",JSON.stringify(wishlist));
-      localStorage.setItem("tv_orders",JSON.stringify(orders));
-      localStorage.setItem("tv_products",JSON.stringify(products));
-      updateBadges();
-    }
-
-    function updateBadges(){
-      document.getElementById("cartCount").textContent = cart.reduce((s,i)=>s+i.qty,0);
-      document.getElementById("wishCount").textContent = wishlist.length;
-    }
-
-    function toast(message){
-      const t=document.getElementById("toast");
-      t.textContent=message;t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"),2400);
-    }
-
-    function refreshIcons(){ if(window.lucide) lucide.createIcons(); }
-
-    function navigate(view){
-      document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-      const target=document.getElementById(view+"View");
-      if(target) target.classList.add("active");
-      window.scrollTo({top:0,behavior:"smooth"});
-      if(view==="shop") renderShop();
-      if(view==="cart") renderCart();
-      if(view==="checkout") renderCheckout();
-      if(view==="account") renderAccount();
-      if(view==="admin") renderAdmin();
-      refreshIcons();
-    }
-
-    function scrollHome(id){
-      navigate("home");
-      setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"}),150);
-    }
-
-    function toggleMobile(){ document.getElementById("mobileNav").classList.toggle("open"); }
-    function mobileGo(view,tag){ toggleMobile(); tag?shopFilter(tag):navigate(view); }
-
-    function productCard(p){
-      const loved=wishlist.includes(p.id);
-      return `<article class="product-card">
-        <div class="product-media" onclick="openProduct(${p.id})">
-          <span class="sale-chip">-${discount(p)}%</span>
-          <button class="heart ${loved?"active":""}" onclick="event.stopPropagation();toggleWish(${p.id})" aria-label="Wishlist"><i data-lucide="heart"></i></button>
-          <img loading="lazy" src="${p.image}" alt="${p.name}">
-        </div>
-        <div class="product-info">
-          <span class="brand">${p.brand}</span><h3 onclick="openProduct(${p.id})" style="cursor:pointer">${p.name}</h3>
-          <div class="rating">★★★★★ <span>${p.rating} (${p.reviews})</span></div>
-          <div class="prices"><span class="price">${money(p.price)}</span><span class="old-price">${money(p.old)}</span><span class="discount">${discount(p)}% off</span></div>
-          <div class="card-actions"><button class="btn btn-sm" onclick="addToCart(${p.id})">Add to Cart</button><button class="btn btn-sm btn-outline" onclick="buyNow(${p.id})">Buy Now</button></div>
-        </div>
-      </article>`;
-    }
-
-    function renderHome(){
-      document.getElementById("categoryGrid").innerHTML=categories.map(c=>`<article class="category-card" onclick="categoryShop('${c[0]}')"><img loading="lazy" src="${c[1]}" alt="${c[0]}"><h3>${c[0]}</h3></article>`).join("");
-      document.getElementById("featuredGrid").innerHTML=products.slice(0,4).map(productCard).join("");
-      document.getElementById("trendingGrid").innerHTML=products.filter(p=>p.tag==="Trending").concat(products[2]).slice(0,4).map(productCard).join("");
-      document.getElementById("bestGrid").innerHTML=products.filter(p=>p.tag==="Best Seller").concat(products[3]).slice(0,4).map(productCard).join("");
-      document.getElementById("newGrid").innerHTML=products.filter(p=>p.tag==="New Arrival").slice(0,4).map(productCard).join("");
-      refreshIcons();
-    }
-
-    function initFilters(){
-      const cats=[...new Set(products.map(p=>p.category))];
-      const brands=[...new Set(products.map(p=>p.brand))];
-      categoryFilter.innerHTML='<option value="">All categories</option>'+cats.map(x=>`<option>${x}</option>`).join("");
-      brandFilter.innerHTML='<option value="">All brands</option>'+brands.map(x=>`<option>${x}</option>`).join("");
-    }
-
-    function renderShop(){
-      const q=(document.getElementById("searchInput")?.value||"").toLowerCase();
-      const cat=document.getElementById("categoryFilter")?.value||"";
-      const brand=document.getElementById("brandFilter")?.value||"";
-      const max=+(document.getElementById("priceFilter")?.value||500);
-      const minRating=+(document.getElementById("ratingFilter")?.value||0);
-      const size=document.getElementById("sizeFilter")?.value||"";
-      const color=document.getElementById("colorFilter")?.value||"";
-      const inStock=document.getElementById("stockFilter")?.value||"";
-      let list=products.filter(p=>
-        (!q || `${p.name} ${p.brand} ${p.category} ${p.tag}`.toLowerCase().includes(q)) &&
-        (!cat || p.category===cat) && (!brand || p.brand===brand) && p.price<=max &&
-        p.rating>=minRating && (!size || p.sizes.includes(size)) &&
-        (!color || p.colors.includes(color)) && (!inStock || p.stock>0)
-      );
-      const sort=document.getElementById("sortFilter")?.value;
-      if(sort==="low") list.sort((a,b)=>a.price-b.price);
-      if(sort==="high") list.sort((a,b)=>b.price-a.price);
-      if(sort==="rating") list.sort((a,b)=>b.rating-a.rating);
-      if(sort==="newest") list.sort((a,b)=>b.id-a.id);
-      if(sort==="popular") list.sort((a,b)=>b.reviews-a.reviews);
-      document.getElementById("resultCount").textContent=`${list.length} premium products found`;
-      document.getElementById("shopGrid").innerHTML=list.length?list.map(productCard).join(""):`<div class="empty" style="grid-column:1/-1"><i data-lucide="search-x"></i><h2>No products found</h2><p>Try adjusting your search or filters.</p></div>`;
-      refreshIcons();
-    }
-
-    function categoryShop(category){
-      navigate("shop");
-      document.getElementById("categoryFilter").value=category;
-      renderShop();
-    }
-
-    function shopFilter(tag){
-      navigate("shop");
-      searchInput.value=tag;
-      renderShop();
-    }
-
-    function clearFilters(){
-      ["categoryFilter","brandFilter","sizeFilter","colorFilter","stockFilter"].forEach(x=>document.getElementById(x).value="");
-      ratingFilter.value="0";priceFilter.value="500";priceLabel.textContent="500";searchInput.value="";
-      renderShop();
-    }
-
-    function addToCart(id,qty=1){
-      const item=cart.find(i=>i.id===id);
-      item?item.qty+=qty:cart.push({id,qty});
-      saveState();toast("Added to your shopping bag");
-    }
-
-    function buyNow(id){ addToCart(id);navigate("cart"); }
-    function toggleWish(id){
-      wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);
-      saveState();renderHome();
-      if(document.getElementById("shopView").classList.contains("active")) renderShop();
-      toast(wishlist.includes(id)?"Saved to wishlist":"Removed from wishlist");
-    }
-
-    function showWishlist(){
-      navigate("shop");
-      searchInput.value="";
-      const list=products.filter(p=>wishlist.includes(p.id));
-      resultCount.textContent=`${list.length} saved products`;
-      shopGrid.innerHTML=list.length?list.map(productCard).join(""):`<div class="empty" style="grid-column:1/-1"><i data-lucide="heart"></i><h2>Your wishlist is empty</h2></div>`;
-      refreshIcons();
-    }
-
-    function openProduct(id){
-      selectedProduct=products.find(p=>p.id===id); detailQty=1;
-      const p=selectedProduct;
-      const gallery=[p.image,p.image.replace("w=800","w=900"),p.image];
-      document.getElementById("productDetail").innerHTML=`
-        <div style="font-size:12px;color:#777;margin-bottom:25px">Home / ${p.category} / ${p.name}</div>
-        <div class="detail-grid">
-          <div class="gallery">
-            <div class="thumbs">${gallery.map((g,i)=>`<button class="thumb ${i===0?"active":""}" onclick="changeImage('${g}',this)"><img src="${g}" alt=""></button>`).join("")}</div>
-            <div class="main-photo"><img id="mainProductImage" src="${p.image}" alt="${p.name}"></div>
-          </div>
-          <div class="detail-info">
-            <span class="brand">${p.brand}</span><h1>${p.name}</h1>
-            <div class="rating">★★★★★ <span>${p.rating} · ${p.reviews} verified reviews</span></div>
-            <div class="detail-price"><span class="price">${money(p.price)}</span><span class="old-price">${money(p.old)}</span><span class="discount">Save ${discount(p)}%</span></div>
-            <p class="detail-description">A refined expression of contemporary design, crafted with premium materials and thoughtful details. Designed for lasting quality, effortless comfort and an elevated everyday experience.</p>
-            <div class="option-label">SELECT SIZE</div><div class="options">${p.sizes.map((s,i)=>`<button class="option ${i===0?"active":""}" onclick="selectOption(this)">${s}</button>`).join("")}</div>
-            <div class="option-label">SELECT COLOR</div><div class="options">${p.colors.map((c,i)=>`<button title="${c}" class="option color-dot ${i===0?"active":""}" style="background-color:${c.toLowerCase()}" onclick="selectOption(this)"></button>`).join("")}</div>
-            <div class="purchase-row">
-              <div class="qty"><button onclick="changeDetailQty(-1)">−</button><b id="detailQty">1</b><button onclick="changeDetailQty(1)">+</button></div>
-              <button class="btn" onclick="addToCart(${p.id},detailQty)">Add to Cart</button>
-              <button class="btn btn-outline buy-detail" onclick="addToCart(${p.id},detailQty);navigate('checkout')">Buy Now</button>
-            </div>
-            <button class="text-link" onclick="toggleWish(${p.id})">♡ Add to Wishlist</button>
-            <div class="info-card"><h4><i data-lucide="map-pin"></i> Check delivery availability</h4><div class="delivery-check"><input class="control" id="deliveryZip" placeholder="Enter ZIP code"><button class="btn btn-sm" onclick="checkDelivery()">Check</button></div><p id="deliveryResult" style="margin-top:8px"></p></div>
-            <div class="info-card"><h4><i data-lucide="truck"></i> Estimated delivery</h4><p>Arrives in 3–6 business days with tracked shipping.</p></div>
-            <div class="info-card"><h4><i data-lucide="shield-check"></i> Secure payment & easy returns</h4><p>Encrypted payments. Return eligible products within 30 days for a refund.</p></div>
-          </div>
-        </div>
-        <div class="tabs">
-          <div class="tab-buttons"><button class="active">Description</button><button>Customer Reviews (${p.reviews})</button><button>Shipping & Returns</button></div>
-          <div class="tab-content"><p>Every TrendVault piece is independently selected for design, craftsmanship and enduring value. Care instructions and material composition are included with your order.</p><div class="review"><strong>Jordan M. · Verified Buyer</strong><div class="rating">★★★★★</div><p>Exceptional quality and beautifully packaged. It feels even more premium in person.</p></div><div class="review"><strong>Taylor R. · Verified Buyer</strong><div class="rating">★★★★★</div><p>Fast delivery, accurate fit and excellent customer care.</p></div></div>
-        </div>
-        <div class="section-head" style="margin-top:55px"><div><h2>Related Products</h2></div></div>
-        <div class="product-grid">${products.filter(x=>x.id!==p.id).slice(0,4).map(productCard).join("")}</div>`;
-      navigate("product");refreshIcons();
-    }
-
-    function changeImage(src,btn){
-      mainProductImage.src=src;
-      document.querySelectorAll(".thumb").forEach(x=>x.classList.remove("active"));
-      btn.classList.add("active");
-    }
-    function selectOption(btn){
-      [...btn.parentElement.children].forEach(x=>x.classList.remove("active"));
-      btn.classList.add("active");
-    }
-    function changeDetailQty(n){ detailQty=Math.max(1,Math.min(10,detailQty+n));detailQty && (document.getElementById("detailQty").textContent=detailQty); }
-    function checkDelivery(){ deliveryResult.textContent=deliveryZip.value.length>=4?"✓ Available. Estimated delivery in 3–6 business days.":"Please enter a valid ZIP code."; }
-
-    function totals(){
-      const subtotal=cart.reduce((s,i)=>s+(products.find(p=>p.id===i.id)?.price||0)*i.qty,0);
-      const discountValue=coupon?subtotal*.10:0;
-      const delivery=subtotal>=99||subtotal===0?0:9.95;
-      return {subtotal,discount:discountValue,delivery,total:subtotal-discountValue+delivery};
-    }
-
-    function renderCart(){
-      if(!cart.length){
-        cartContent.innerHTML=`<div class="empty"><i data-lucide="shopping-bag"></i><h2>Your bag is empty</h2><p>Discover something exceptional for your collection.</p><button class="btn" onclick="navigate('shop')">Start Shopping</button></div>`;
-        refreshIcons();return;
-      }
-      cartContent.innerHTML=`<div class="cart-layout"><div>${cart.map(i=>{
-        const p=products.find(x=>x.id===i.id);
-        return `<div class="cart-item"><img src="${p.image}" alt="${p.name}"><div><span class="brand">${p.brand}</span><h3>${p.name}</h3><div class="qty" style="width:100px;height:38px"><button onclick="updateQty(${p.id},-1)">−</button><b>${i.qty}</b><button onclick="updateQty(${p.id},1)">+</button></div><button class="remove" onclick="removeCart(${p.id})">Remove</button></div><strong class="price">${money(p.price*i.qty)}</strong></div>`;
-      }).join("")}</div><aside class="summary-card">${summaryHTML()}<button class="btn btn-block" onclick="navigate('checkout')">Proceed to Checkout <i data-lucide="arrow-right"></i></button></aside></div>`;
-      refreshIcons();
-    }
-
-    function summaryHTML(){
-      const t=totals();
-      return `<h2>Order Summary</h2><div class="summary-line"><span>Subtotal</span><b>${money(t.subtotal)}</b></div><div class="summary-line"><span>Discount</span><b style="color:#147a4b">−${money(t.discount)}</b></div><div class="summary-line"><span>Delivery</span><b>${t.delivery?money(t.delivery):"FREE"}</b></div><div class="coupon"><input class="control" id="couponCode" placeholder="Coupon code"><button class="btn btn-sm" onclick="applyCoupon()">Apply</button></div><small style="color:#777">Try VAULT10 for 10% off</small><div class="summary-line summary-total"><span>Total</span><span>${money(t.total)}</span></div>`;
-    }
-
-    function updateQty(id,n){
-      const item=cart.find(i=>i.id===id);item.qty+=n;
-      if(item.qty<1) cart=cart.filter(i=>i.id!==id);
-      saveState();renderCart();
-    }
-    function removeCart(id){ cart=cart.filter(i=>i.id!==id);saveState();renderCart();toast("Item removed"); }
-    function applyCoupon(){
-      if((document.getElementById("couponCode")?.value||"").toUpperCase()==="VAULT10"){coupon="VAULT10";toast("Coupon applied: 10% off");}
-      else toast("Enter a valid coupon code");
-      document.getElementById("cartView").classList.contains("active")?renderCart():renderCheckout();
-    }
-
-    function renderCheckout(){
-      if(!cart.length){toast("Your bag is empty");navigate("shop");return;}
-      checkoutSummary.innerHTML=summaryHTML()+`<button class="btn btn-block" onclick="document.getElementById('checkoutForm').requestSubmit()">Place Secure Order</button><div class="secure-message"><i data-lucide="lock"></i>Your payment and personal information are protected.</div>`;
-      refreshIcons();
-    }
-
-    function placeOrder(e){
-      e.preventDefault();
-      const f=new FormData(e.target), t=totals();
-      const order={
-        id:"TV-"+Date.now().toString().slice(-8),
-        date:new Date().toLocaleDateString(),
-        items:[...cart],total:t.total,
-        customer:f.get("name"),email:f.get("email"),
-        address:`${f.get("address")}, ${f.get("city")}, ${f.get("state")} ${f.get("pin")}`,
-        payment:f.get("payment"),status:"Confirmed",
-        delivery:new Date(Date.now()+5*86400000).toLocaleDateString()
-      };
-      orders.unshift(order);localStorage.setItem("tv_orders",JSON.stringify(orders));
-      cart=[];coupon=null;saveState();renderConfirmation(order);navigate("confirmation");
-    }
-
-    function renderConfirmation(o){
-      confirmationContent.innerHTML=`<div class="confirmation"><div class="success-icon"><i data-lucide="check"></i></div><h1>Order Placed Successfully!</h1><p>Thank you, ${o.customer}. Your order has been confirmed.</p><div class="confirmation-details"><div class="summary-line"><span>Order ID</span><b>${o.id}</b></div><div class="summary-line"><span>Products</span><b>${o.items.length} item(s)</b></div><div class="summary-line"><span>Total amount</span><b>${money(o.total)}</b></div><div class="summary-line"><span>Delivery address</span><b style="max-width:55%;text-align:right">${o.address}</b></div><div class="summary-line"><span>Estimated delivery</span><b>${o.delivery}</b></div></div><div class="hero-buttons" style="justify-content:center"><button class="btn" onclick="navigate('account')">Track Order</button><button class="btn btn-outline" onclick="navigate('shop')">Continue Shopping</button></div></div>`;
-      refreshIcons();
-    }
-
-    function renderAccount(){
-      if(!user){
-        accountContent.innerHTML=`<div class="auth-wrap"><div class="auth-card"><h1 id="authTitle">Welcome back</h1><p id="authText">Sign in to access orders, wishlist and saved addresses.</p><form onsubmit="authenticate(event)"><div class="field" id="nameField" style="display:none"><label>FULL NAME</label><input class="control" id="authName"></div><div class="field"><label>EMAIL ADDRESS</label><input class="control" type="email" id="authEmail" required></div><div class="field"><label>PASSWORD</label><input class="control" type="password" required minlength="4"></div><button class="btn btn-block" id="authButton">Login</button></form><div class="auth-switch"><button onclick="toast('Password reset link sent if the account exists')">Forgot Password?</button><br><br><span id="switchText">New to TrendVault?</span> <button onclick="toggleAuth()" id="switchButton">Sign Up</button></div></div></div>`;
-      } else {
-        accountContent.innerHTML=`<div class="account-grid"><aside class="account-menu"><button class="active"><i data-lucide="package"></i> My Orders</button><button onclick="showWishlist()"><i data-lucide="heart"></i> Wishlist</button><button><i data-lucide="map-pin"></i> Saved Addresses</button><button><i data-lucide="settings"></i> Profile Settings</button><button onclick="logout()"><i data-lucide="log-out"></i> Logout</button></aside><div><div class="dashboard-card"><span class="brand">MY ACCOUNT</span><h1 style="font-family:Manrope">Hello, ${user.name}</h1><p style="color:#777">Track orders and manage your TrendVault profile.</p></div><div class="dashboard-card" style="margin-top:20px"><h2>My Orders & Tracking</h2>${orders.length?orders.map(orderCard).join(""):`<div class="empty"><i data-lucide="package-open"></i><h2>No orders yet</h2><button class="btn" onclick="navigate('shop')">Explore Collection</button></div>`}</div></div></div>`;
-      }
-      refreshIcons();
-    }
-
-    let signupMode=false;
-    function toggleAuth(){
-      signupMode=!signupMode;
-      authTitle.textContent=signupMode?"Create your account":"Welcome back";
-      authText.textContent=signupMode?"Join TrendVault for a personalized shopping experience.":"Sign in to access orders, wishlist and saved addresses.";
-      nameField.style.display=signupMode?"block":"none";
-      authButton.textContent=signupMode?"Sign Up":"Login";
-      switchText.textContent=signupMode?"Already have an account?":"New to TrendVault?";
-      switchButton.textContent=signupMode?"Login":"Sign Up";
-    }
-    function authenticate(e){
-      e.preventDefault();
-      user={name:signupMode?(authName.value||"TrendVault Member"):"TrendVault Member",email:authEmail.value};
-      localStorage.setItem("tv_user",JSON.stringify(user));toast(signupMode?"Account created successfully":"Welcome back");renderAccount();
-    }
-    function logout(){user=null;localStorage.removeItem("tv_user");renderAccount();toast("Signed out");}
-    function orderCard(o){
-      const p=products.find(x=>x.id===o.items[0]?.id)||products[0];
-      return `<div class="order-card"><img src="${p.image}"><div style="flex:1"><b>${o.id}</b><p style="margin:5px 0;color:#777;font-size:12px">${o.date} · ${o.items.length} item(s) · ${money(o.total)}</p><span class="status">${o.status} · Delivery ${o.delivery}</span></div><button class="btn btn-sm btn-outline" onclick="toast('Tracking: Order confirmed and preparing for dispatch')">Track Order</button></div>`;
-    }
-
-    function renderAdmin(){
-      const revenue=orders.reduce((s,o)=>s+o.total,0);
-      adminStats.innerHTML=`<div class="stat"><span>Total Revenue</span><b>${money(revenue)}</b></div><div class="stat"><span>Orders</span><b>${orders.length}</b></div><div class="stat"><span>Products</span><b>${products.length}</b></div><div class="stat"><span>Customers</span><b>${new Set(orders.map(o=>o.email)).size}</b></div>`;
-      adminProducts.innerHTML=products.map(p=>`<tr><td><div style="display:flex;align-items:center;gap:10px"><img src="${p.image}"><b>${p.name}</b></div></td><td>${p.category}</td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="status">${p.stock?"Active":"Out of stock"}</span></td></tr>`).join("");
-      adminOrders.innerHTML=orders.length?orders.map(o=>`<tr><td><b>${o.id}</b></td><td>${o.customer}</td><td>${money(o.total)}</td><td>${o.payment}</td><td><select class="control" style="height:35px;width:135px" onchange="updateOrder('${o.id}',this.value)"><option>${o.status}</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Refunded</option></select></td></tr>`).join(""):`<tr><td colspan="5">No orders created yet.</td></tr>`;
-    }
-
-    function updateOrder(id,status){orders.find(o=>o.id===id).status=status;saveState();toast("Order status updated");}
-    function addAdminProduct(){
-      const name=prompt("Product name:");if(!name)return;
-      products.push({id:Date.now(),name,brand:"TrendVault",category:"Fashion",price:99,old:129,rating:4.5,reviews:0,tag:"New Arrival",stock:10,colors:["Black"],sizes:["S","M","L"],image:"https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80"});
-      saveState();initFilters();renderAdmin();renderHome();toast("Product added to catalog");
-    }
-
-    function subscribe(e){e.preventDefault();toast("Welcome inside the Vault — check your inbox!");e.target.reset();}
-
-    function startCountdown(){
-      let end=Date.now()+36*60*60*1000;
-      setInterval(()=>{
-        let d=end-Date.now(),h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);
-        countdown.innerHTML=[[h,"Hours"],[m,"Minutes"],[s,"Seconds"]].map(x=>`<div class="count-box"><b>${String(x[0]).padStart(2,"0")}</b><span>${x[1]}</span></div>`).join("");
-      },1000);
-    }
-
-    renderHome();
-    initFilters();
-    updateBadges();
-    startCountdown();
-    refreshIcons();
-  </script>
+<script>
+const services=[
+['Hair','Haircut','Signature cut and styling','Contact for price',''],
+['Hair','Hair Spa + Haircut','Hair spa with professional haircut','₹1,499','₹2,500'],
+['Hair','Global Hair Coloring','Global colour service','From ₹2,500 + tax',''],
+['Hair','Ombré / Balayage','Dimensional modern colour','From ₹4,500 + tax',''],
+['Hair','Hair Extensions','Consultation-led extension service','Contact for price',''],
+['Hair','Keratin Treatment','Smoothness and manageability treatment','From ₹3,999','50% OFF'],
+['Hair','Hair Straightening','Professional straightening','₹2,950','₹5,000'],
+['Hair','Hair Smoothening','Professional smoothening','₹3,422','₹6,000'],
+['Hair','Nanoplastia','Advanced smoothing service','From ₹4,449',''],
+['Hair','Silk/Kerasmoothening','Premium smoothening treatment','From ₹4,999',''],
+['Skin & Facial','Facial','Classic facial experience','₹2,500–₹4,000',''],
+['Skin & Facial','Advanced Facial','Advanced facial experience','₹3,000–₹5,000',''],
+['Skin & Facial','Hydrafacial','Hydrafacial treatment','₹2,498 + GST','₹4,999'],
+['Skin & Facial','Chemical Peels','Professional peel treatment','Contact for price',''],
+['Skin & Facial','Anti-Aging Treatments','Personalized anti-aging care','Contact for price',''],
+['Skin & Facial','Skin Rejuvenation','Skin renewal treatment','Contact for price',''],
+['Skin & Facial','Acne Treatment','Targeted acne treatment','₹3,540/session',''],
+['Skin & Facial','Pigmentation Treatment','Targeted pigmentation treatment','₹3,540/session',''],
+['Beauty & Styling','Bridal Styling','Bridal beauty consultation and styling','Contact for price',''],
+['Beauty & Styling','Special Occasion Styling','Event-ready beauty styling','Contact for price',''],
+['Spa & Body Care','Body Spa Massage','Relaxing body spa massage','From ₹2,500 + 18% GST',''],
+['Spa & Body Care','Body Polishing / Exfoliation','Body polishing treatment','From ₹1,500 + 18% GST',''],
+['Spa & Body Care','Damage Control Add-on','Hair damage-control add-on','From ₹1,500','']
+];
+const offers=[['Haircut + Keratin Spa','₹2,499'],['10 Highlights + Haircut + Spa','₹3,999'],['6 Facials Package','₹12,000'],['6 Facials + 10 Highlights','₹15,000'],['Acne Treatment','₹3,540/session · 6-session ₹14,868'],['Pigmentation Treatment','₹3,540/session · 6-session ₹14,868']];
+const branches=['Mumbai','Kolkata','Bengaluru','Guwahati','Tezpur','Nagaon','Hojai','Tinsukia','Gurugram','Delhi','Ghatkopar','Zoo Road — Guwahati'];
+const imgs=[
+'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1000&q=85',
+'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=85',
+'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1000&q=85',
+'https://images.unsplash.com/photo-1519415387722-a1c3bb7c7cf3?auto=format&fit=crop&w=1000&q=85',
+'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1000&q=85',
+'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=85'
+];
+const state={bookings:JSON.parse(localStorage.getItem('athenian_bookings')||'[]'),settings:JSON.parse(localStorage.getItem('athenian_settings')||'{}')};
+function renderServices(cat='All'){
+ const tabs=['All','Hair','Skin & Facial','Beauty & Styling','Spa & Body Care'];
+ serviceTabs.innerHTML=tabs.map(x=>'<button class="tab '+(x===cat?'active':'')+'" onclick="renderServices(\''+x+'\')">'+x+'</button>').join('');
+ const list=cat==='All'?services:services.filter(s=>s[0]===cat);
+ serviceGrid.innerHTML=list.map((s,i)=>'<article class="card"><div class="photo"><img loading="lazy" src="'+imgs[i%imgs.length]+'" alt="'+s[1]+'"><span class="chip">'+s[0]+'</span></div><div class="cardbody"><h3>'+s[1]+'</h3><p class="desc">'+s[2]+'</p><div class="price">'+s[3]+(s[4]?'<span class="old">'+s[4]+'</span>':'')+'</div><a class="btn small" href="#booking" onclick="selectService(\''+s[1].replace(/'/g,"\\'")+'\')">BOOK NOW</a></div></article>').join('');
+ serviceSelect.innerHTML='<option value="">Select service</option>'+services.map(s=>'<option>'+s[1]+'</option>').join('');
+}
+function renderOffers(){offerGrid.innerHTML=offers.map(x=>'<article class="offer"><span class="eyebrow">ATHENIAN OFFER</span><h3>'+x[0]+'</h3><strong>'+x[1]+'</strong><p style="color:#aaa;font-size:11px;margin-top:16px">Offer availability and eligibility are confirmed by the salon.</p></article>').join('')}
+function renderBranches(){branchGrid.innerHTML=branches.map((b,i)=>{let hi=b==='Guwahati';let address=hi?'GS Road, Christian Basti, Guwahati, Assam 781005':'Address to be configured by owner';let phone=hi?'8099334345':'';return '<article class="branch '+(hi?'highlight':'')+'"><span class="eyebrow">'+(hi?'FEATURED LOCATION':'ATHENIAN BRANCH')+'</span><h3>'+b+'</h3><p>'+address+'</p><div class="branch-actions">'+(phone?'<a class="btn small" href="tel:'+phone+'">CALL</a><a class="btn small alt" target="_blank" href="https://wa.me/91'+phone+'">WHATSAPP</a>':'<button class="btn small alt" onclick="toast(\'Branch contact is configurable in Admin.\')">CONTACT</button>')+'<a class="btn small alt" target="_blank" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address==='Address to be configured by owner'?b:address)+'">MAP</a><a class="btn small gold" href="#booking" onclick="selectBranch(\''+b.replace(/'/g,"\\'")+'\')">BOOK</a></div></article>'}).join('')}
+function renderTransform(){const names=['Hair Transformation','Hair Coloring','Balayage','Smoothening','Facial Glow','Bridal Styling'];transformGrid.innerHTML=names.map((n,i)=>'<article class="card"><div class="photo"><img loading="lazy" src="'+imgs[(i+1)%imgs.length]+'" alt="'+n+'"><span class="chip">PLACEHOLDER</span></div><div class="cardbody"><h3>'+n+'</h3><p class="desc">Replace this placeholder with an authentic Athenian transformation image from Admin.</p></div></article>').join('')}
+function renderGallery(){galleryGrid.innerHTML=imgs.concat(imgs.slice(0,3)).map((im,i)=>'<div class="gallery-item" onclick="openImage(\''+im+'\')"><img loading="lazy" src="'+im+'" alt="Athenian salon gallery placeholder"></div>').join('')}
+function renderWhy(){const x=[['sparkles','Professional Expertise'],['gem','Premium Salon Experience'],['scissors','Hair & Skin Services'],['wand-sparkles','Modern Techniques'],['map-pin','Multiple Locations'],['heart-handshake','Personalized Beauty Care']];whyGrid.innerHTML=x.map(a=>'<article class="card"><i data-lucide="'+a[0]+'"></i><h3 class="serif" style="font-size:24px">'+a[1]+'</h3><p class="desc">A premium experience built around professional service and individual needs.</p></article>').join('');lucide.createIcons()}
+function selectService(s){serviceSelect.value=s} function selectBranch(b){branchSelect.value=b}
+bookingForm.addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);const id='ATH-'+Date.now().toString().slice(-8);const b={id,name:f.get('name'),phone:f.get('phone'),email:f.get('email'),branch:f.get('branch'),service:f.get('service'),date:f.get('date'),time:f.get('time'),people:f.get('people'),message:f.get('message'),payment:f.get('payment'),status:'Pending'};state.bookings.unshift(b);localStorage.setItem('athenian_bookings',JSON.stringify(state.bookings));bookingFormWrap.style.display='none';bookingConfirm.classList.add('show');bookingMessage.textContent='Booking ID: '+id+' • '+b.branch+' • '+b.service+' • '+b.date+' at '+b.time+'. Owner email/WhatsApp notifications require the configured backend integration.';toast('Booking created: '+id)});
+function openReview(){modalContent.innerHTML='<h2 class="serif">Write a Review</h2><p style="color:#777">Reviews are moderated before appearing publicly.</p><form onsubmit="submitReview(event)"><div class="formgrid"><div class="field"><label>NAME</label><input required></div><div class="field"><label>RATING</label><select required><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div><div class="field span2"><label>REVIEW</label><textarea required></textarea></div><div class="span2"><button class="btn gold">SUBMIT FOR MODERATION</button></div></div></form>';modal.classList.add('open')}
+function submitReview(e){e.preventDefault();closeModal();toast('Review submitted for admin moderation')}
+function openImage(src){modalContent.innerHTML='<img style="border-radius:15px;max-height:75vh;object-fit:contain;background:#111" src="'+src+'" alt=""><p style="margin:10px 0 0;color:#777;font-size:11px">Placeholder image — replace with authentic salon media.</p>';modal.classList.add('open')}
+function closeModal(){modal.classList.remove('open')}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2800)}
+function openAdmin(){document.querySelector('main').style.display='none';document.querySelector('footer').style.display='none';document.querySelector('.fab').style.display='none';admin.classList.add('show');renderAdmin()}
+function closeAdmin(){admin.classList.remove('show');document.querySelector('main').style.display='block';document.querySelector('footer').style.display='block';document.querySelector('.fab').style.display='grid'}
+function renderAdmin(){ownerEmail.value=state.settings.email||'';ownerWhatsApp.value=state.settings.whatsapp||'';paymentMode.value=state.settings.payment||'Pay at Salon';bookingTable.innerHTML=state.bookings.length?state.bookings.map(b=>'<tr><td>'+b.id+'</td><td>'+b.name+'<br>'+b.phone+'</td><td>'+b.branch+'</td><td>'+b.service+'</td><td>'+b.date+'<br>'+b.time+'</td><td><select onchange="changeStatus(\''+b.id+'\',this.value)"><option '+(b.status==='Pending'?'selected':'')+'>Pending</option><option '+(b.status==='Confirmed'?'selected':'')+'>Confirmed</option><option '+(b.status==='Completed'?'selected':'')+'>Completed</option><option '+(b.status==='Cancelled'?'selected':'')+'>Cancelled</option></select></td></tr>').join(''):'<tr><td colspan="6">No bookings yet.</td></tr>'}
+function changeStatus(id,s){const b=state.bookings.find(x=>x.id===id);if(b)b.status=s;localStorage.setItem('athenian_bookings',JSON.stringify(state.bookings));toast('Booking status updated')}
+function saveSettings(){state.settings={email:ownerEmail.value,whatsapp:ownerWhatsApp.value,payment:paymentMode.value};localStorage.setItem('athenian_settings',JSON.stringify(state.settings));toast('Admin settings saved locally')}
+function exportBookings(){const blob=new Blob([JSON.stringify(state.bookings,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='athenian-bookings.json';a.click()}
+document.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+branchSelect.innerHTML='<option value="">Select branch</option>'+branches.map(b=>'<option>'+b+'</option>').join('');
+renderServices();renderOffers();renderBranches();renderTransform();renderGallery();renderWhy();lucide.createIcons();
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
 </body>
 </html>
